@@ -1,0 +1,6 @@
+db.sqlite3
+devenv
+.env
+.vscode/
+__pycache__/
+NOTAS.md

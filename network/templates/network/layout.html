@@ -1,0 +1,55 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>
+      Twibble -{% block title %}
+      {% endblock %}
+    </title>
+    <link rel="icon" href="{% static 'network/img/duck-color.svg' %}" type="image/x-icon">
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Matemasie&display=swap" rel="stylesheet" />
+    <link href="{% static 'network/styles.css' %}" rel="stylesheet" />
+    {% block script %}
+
+    {% endblock %}
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__nav-container">
+        <div>
+          {% if user.is_authenticated %}
+            <a href="{% url 'profile' user.username %}" class="header__username">{{ user.username }}</a>
+          {% endif %}
+        </div>
+
+        <nav class="header__nav">
+          <a href="{% url 'index' %}" class="header__nav-link {% if request.resolver_match.url_name == 'index' %}header__nav-link--active{% endif %}">All Posts</a>
+
+          {% if user.is_authenticated %}
+            <a href="{% url 'following' %}" class="header__nav-link {% if request.resolver_match.url_name == 'following' %}header__nav-link--active{% endif %}">Following</a>
+            <a href="{% url 'logout' %}" class="header__nav-link header__nav-link--logout">Log Out</a>
+          {% else %}
+            <a href="{% url 'login' %}" class="header__nav-link {% if request.resolver_match.url_name == 'login' %}header__nav-link--active{% endif %}">Log In</a>
+            <a href="{% url 'register' %}" class="header__nav-link {% if request.resolver_match.url_name == 'register' %}header__nav-link--active{% endif %}">Register</a>
+          {% endif %}
+        </nav>
+      </div>
+      <div class="header__icon-container">
+        <a class="header__icon" href="/">
+          <p>Twack</p>
+          <img src="{% static 'network/img/duck-color.svg' %}" alt="Twibble Logo" width="200" />
+        </a>
+      </div>
+    </header>
+
+    <main>
+      {% block body %}
+
+      {% endblock %}
+    </main>
+  </body>
+</html>
