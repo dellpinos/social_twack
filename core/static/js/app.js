@@ -1,13 +1,13 @@
-document.addEventListener('DOMContentLoaded', () => {
-    
+export default function app() {
+
     // Images
-    const imgIconEmpty = '/static/network/img/heart-empty.svg';
-    const imgIconFull = '/static/network/img/heart-full.svg';
-    const imgIconEdit = '/static/network/img/edit.svg';
-    const imgIconComment = '/static/network/img/comment-white.svg';
+    const imgIconEmpty = '/static/img/heart-empty.svg';
+    const imgIconFull = '/static/img/heart-full.svg';
+    const imgIconEdit = '/static/img/edit.svg';
+    const imgIconComment = '/static/img/comment-white.svg';
 
     // Submit Post
-    if(document.querySelector('#post-submit')) {
+    if (document.querySelector('#post-submit')) {
 
         const submitPost = document.querySelector('#post-submit');
 
@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const txt = document.querySelector('#post-text');
 
             // Validation
-            if(txt.value.length > 5 && txt.value.length < 550) {
+            if (txt.value.length > 5 && txt.value.length < 550) {
 
                 const data = {
                     postContent: txt.value
@@ -27,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 const urlNewPost = "/api/new_post";
                 const response = await sendText(urlNewPost, data);
 
-                if( response.status) {
+                if (response.status) {
 
                     // Render on posts
                     const postList = document.querySelector('#posts-list');
@@ -36,12 +36,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Delete error message
                     const formContainer = document.querySelector('.form__container');
                     const errorMsg = formContainer.querySelector('P');
-                    if(errorMsg) if ( errorMsg.dataset.errorMsg ) errorMsg.remove();
+                    if (errorMsg) if (errorMsg.dataset.errorMsg) errorMsg.remove();
 
                     postList.insertBefore(newPost, postList.firstChild);
                     txt.value = '';
 
-                    if( document.querySelector('#posts-empty-msg')) document.querySelector('#posts-empty-msg').remove(); 
+                    if (document.querySelector('#posts-empty-msg')) document.querySelector('#posts-empty-msg').remove();
                 }
 
             } else {
@@ -56,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if(document.querySelector('#btn-follow-change')) {
+    if (document.querySelector('#btn-follow-change')) {
 
         // Follow code
         const btnFollow = document.querySelector('#btn-follow-change');
@@ -71,15 +71,15 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             const result = await handleChanges(data, url);
 
-            if( result.status ) {
-                if( btnFollow.dataset.followed === "1" ) {
-                    
+            if (result.status) {
+                if (btnFollow.dataset.followed === "1") {
+
                     btnFollow.textContent = "Follow";
                     btnFollow.dataset.followed = "0";
                     followers.textContent = parseInt(followers.textContent) - 1;
 
                 } else {
-                    
+
                     btnFollow.textContent = "Unfollow"
                     btnFollow.dataset.followed = "1";
                     followers.textContent = parseInt(followers.textContent) + 1;
@@ -88,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if(document.querySelector('.post__btn-like')) {
+    if (document.querySelector('.post__btn-like')) {
 
         // Likes code
         const btnsLike = document.querySelectorAll('.post__btn-like');
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             btnLike.addEventListener('click', async () => {
 
-                const likeCounter = likeCounters.find( counter => counter.dataset.id === btnLike.value);
+                const likeCounter = likeCounters.find(counter => counter.dataset.id === btnLike.value);
                 const likesImg = btnLike.querySelector('IMG');
 
                 changeLike(btnLike, likeCounter, likesImg);
@@ -106,18 +106,18 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    if(document.querySelector('.post__btn-edit')) {
+    if (document.querySelector('.post__btn-edit')) {
 
         // Edit code
         const btnsEdit = document.querySelectorAll('.post__btn-edit');
 
-        btnsEdit.forEach( btn => {
+        btnsEdit.forEach(btn => {
 
             const postId = btn.dataset.id;
             const postCard = document.querySelector(`#post-container-${postId}`);
             const postContent = document.querySelector(`#post-content-${postId}`);
             const postDate = document.querySelector(`#post-date-${postId}`);
-            
+
             btn.addEventListener('click', () => {
 
                 editPost(btn, postContent, postDate, postCard, postId);
@@ -133,26 +133,26 @@ document.addEventListener('DOMContentLoaded', () => {
         const listsComments = Array.from(document.querySelectorAll('.comments__list'));
         const commentsCounters = Array.from(document.querySelectorAll('.post__comment-counter'));
 
-        btnComments.forEach( btn => {
+        btnComments.forEach(btn => {
 
             let flagCommentForm = true;
 
             btn.addEventListener('click', async () => {
 
-                const container = containersComments.find( container => container.dataset.id === btn.value);
-                const commentsCounter = commentsCounters.find( counter => counter.dataset.id === btn.value);
+                const container = containersComments.find(container => container.dataset.id === btn.value);
+                const commentsCounter = commentsCounters.find(counter => counter.dataset.id === btn.value);
                 container.classList.toggle('comments__container--hidden');
 
-                if(flagCommentForm) {
-    
-                    const response  = await requestComments(btn.value);
-                    const list = listsComments.find( list => list.dataset.id === btn.value);
+                if (flagCommentForm) {
+
+                    const response = await requestComments(btn.value);
+                    const list = listsComments.find(list => list.dataset.id === btn.value);
                     const newCommentResult = newComment(list, btn, container, flagCommentForm, commentsCounter);
 
                     if (response.status) {
                         if (response.comments.length >= 1) {
 
-                            response.comments.forEach( comment => {
+                            response.comments.forEach(comment => {
                                 const element = formatComment(comment.content, comment.user, comment.created_at, comment.id, comment.likes_count, comment.already_liked);
                                 list.appendChild(element);
                             });
@@ -175,12 +175,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    async function postNewComment(e, input, list, postId){
+    async function postNewComment(e, input, list, postId) {
         e.preventDefault();
-        
+
         // Validation
-        if(input.value.length > 5 && input.value.length < 550) {
-            
+        if (input.value.length > 5 && input.value.length < 550) {
+
             const data = {
                 commentContent: input.value,
                 postId
@@ -189,7 +189,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const urlNewPost = "/api/new_comment"
             const response = await sendText(urlNewPost, data);
 
-            if( response.status) {
+            if (response.status) {
                 const element = formatComment(response.comment.content, response.comment.user, response.comment.created_at, response.comment.id, response.comment.likes_count, response.comment.already_liked);
 
                 list.appendChild(element);
@@ -201,7 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Format Post
-    function formatPost({user, content, created_at, id}) {
+    function formatPost({ user, content, created_at, id }) {
 
         // > Usename
         const userlink = document.createElement('A');
@@ -211,7 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const postDate = document.createElement('P');
         postDate.textContent = '- ' + created_at;
-        
+
         const cardUsername = document.createElement('DIV');
         cardUsername.classList.add('post__card-username');
 
@@ -318,10 +318,10 @@ document.addEventListener('DOMContentLoaded', () => {
         // > End Post Card
 
         let flagCommentForm = true;
-        
+
         btnComments.addEventListener('click', () => {
-            
-            if(flagCommentForm) {
+
+            if (flagCommentForm) {
                 newComment(commentsList, btnComments, commentsContainer, flagCommentForm, commentsCounter);
                 flagCommentForm = false;
                 commentsContainer.classList.remove('comments__container--hidden');
@@ -331,7 +331,7 @@ document.addEventListener('DOMContentLoaded', () => {
         btnEdit.addEventListener('click', () => {
             editPost(btnEdit, postContent, postDate, newPost, id);
         })
-        
+
         btnLike.addEventListener('click', async () => {
             changeLike(btnLike, likesCounter, likesImg);
         });
@@ -348,16 +348,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         const result = await handleChanges(data, url);
 
-        if( result.status ) {
+        if (result.status) {
 
-            if( btnLike.dataset.liked === "1" ) {
-                
+            if (btnLike.dataset.liked === "1") {
+
                 likesImg.src = imgIconEmpty;
                 btnLike.dataset.liked = "0";
                 likesCounter.textContent = parseInt(likesCounter.textContent) - 1;
-                
+
             } else {
-                
+
                 likesImg.src = imgIconFull;
                 btnLike.dataset.liked = "1";
                 likesCounter.textContent = parseInt(likesCounter.textContent) + 1;
@@ -365,25 +365,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    async function changeLike(btnLike, likeCounter, likesImg){
+    async function changeLike(btnLike, likeCounter, likesImg) {
 
         const url = "/api/change_like";
-        
+
         const data = {
             postToLikeId: btnLike.value
         }
         const result = await handleChanges(data, url);
 
-        if( result.status ) {
+        if (result.status) {
 
-            if( btnLike.dataset.liked === "1" ) {
-                
+            if (btnLike.dataset.liked === "1") {
+
                 likesImg.src = imgIconEmpty;
                 btnLike.dataset.liked = "0";
                 likeCounter.textContent = parseInt(likeCounter.textContent) - 1;
 
             } else {
-                
+
                 likesImg.src = imgIconFull;
                 btnLike.dataset.liked = "1";
                 likeCounter.textContent = parseInt(likeCounter.textContent) + 1;
@@ -406,7 +406,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const btnsContainer = document.createElement('DIV');
         btnsContainer.classList.add('edit__btns-container');
-        
+
         const textEditor = document.createElement('TEXTAREA');
         textEditor.classList.add('edit__input-txt');
         textEditor.value = postContent.textContent;
@@ -414,7 +414,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const btnSave = document.createElement('BUTTON');
         btnSave.classList.add('edit__btn-save', 'btn');
         btnSave.textContent = "Save";
-        
+
         const btnCancel = document.createElement('BUTTON');
         btnCancel.classList.add('edit__btn-cancel', 'btn');
         btnCancel.textContent = "Cancel";
@@ -437,36 +437,36 @@ document.addEventListener('DOMContentLoaded', () => {
             postContent.style.display = "block";
             postDate.style.display = "block";
 
-            while( btnsContainer.firstChild) {
+            while (btnsContainer.firstChild) {
                 btnsContainer.firstChild.remove();
             }
             btnsContainer.remove();
 
-            while( textEditorContainer.firstChild) {
+            while (textEditorContainer.firstChild) {
                 textEditorContainer.firstChild.remove();
             }
             textEditorContainer.remove();
         });
-        
+
         btnSave.addEventListener('click', async (e) => {
             e.preventDefault();
 
             // Validation
-            if(textEditor.value.length > 5 && textEditor.value.length < 550) {
-                
+            if (textEditor.value.length > 5 && textEditor.value.length < 550) {
+
                 const data = {
                     postContent: textEditor.value,
                     postId
                 }
-                
+
                 const urlNewPost = "/api/update_post";
                 const response = await sendText(urlNewPost, data);
 
-                if( response.status) {
+                if (response.status) {
 
                     // Delete error message
                     const errorMsg = textEditorContainer.querySelector('P');
-                    if( errorMsg) if( errorMsg.dataset.errorMsg ) errorMsg.remove();
+                    if (errorMsg) if (errorMsg.dataset.errorMsg) errorMsg.remove();
 
                     postContent.textContent = textEditor.value;
                     postDate.textContent = " - " + response.post.updated_at + " (edited)";
@@ -477,11 +477,11 @@ document.addEventListener('DOMContentLoaded', () => {
                     postDate.style.display = "block";
 
                     // Delete elements
-                    while( btnsContainer.firstChild) {
+                    while (btnsContainer.firstChild) {
                         btnsContainer.firstChild.remove();
                     }
                     btnsContainer.remove();
-                    while( textEditorContainer.firstChild) {
+                    while (textEditorContainer.firstChild) {
                         textEditorContainer.firstChild.remove();
                     }
                     textEditorContainer.remove();
@@ -503,7 +503,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function newComment(list, btn, container, flagCommentForm, commentsCounter) {
 
         let form;
-        if(flagCommentForm) {
+        if (flagCommentForm) {
             form = commentForm();
             container.appendChild(form);
             flagCommentForm = false;
@@ -513,16 +513,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const inputSubmit = form.querySelector('INPUT');
         const inputText = form.querySelector('TEXTAREA');
-            
+
         // Post comment
         const newCommentResult = inputSubmit.addEventListener('click', e => {
 
             e.preventDefault();
-            if(inputText.value.length > 5 && inputText.value.length < 550) {
+            if (inputText.value.length > 5 && inputText.value.length < 550) {
 
                 // Delete default message
                 const msg = form.querySelector('P');
-                if (msg) if(msg.dataset.errorMsg ) msg.remove();
+                if (msg) if (msg.dataset.errorMsg) msg.remove();
 
                 postNewComment(e, inputText, list, btn.value);
                 commentsCounter.textContent = parseInt(commentsCounter.textContent) + 1;
@@ -536,7 +536,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 form.insertBefore(errorMsg, form.children[1]);
             }
         });
-        
+
         return newCommentResult;
     }
 
@@ -558,7 +558,7 @@ document.addEventListener('DOMContentLoaded', () => {
         inputSubmit.type = "submit";
         inputSubmit.classList.add("comments__submit", "btn");
         inputSubmit.value = "Submit";
-    
+
         inputSubmitContainer.appendChild(inputSubmit);
         form.appendChild(inputText);
         form.appendChild(inputSubmitContainer);
@@ -577,7 +577,7 @@ document.addEventListener('DOMContentLoaded', () => {
         userlink.classList.add('comment__card-username-link');
         const postDate = document.createElement('P');
         postDate.textContent = "- " + created_at;
-        
+
         const cardUsername = document.createElement('DIV');
         cardUsername.classList.add('comment__card-username');
 
@@ -593,7 +593,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // > Btns Container
         const btnsContainer = document.createElement('DIV');
         btnsContainer.classList.add('comment__btns-container');
-        
+
         // > Btn Like
         const btnLike = document.createElement('BUTTON');
         btnLike.classList.add('comment__btn-like');
@@ -616,7 +616,7 @@ document.addEventListener('DOMContentLoaded', () => {
         // > End Btn Like
 
         btnsContainer.appendChild(btnLike);
-        
+
         const element = document.createElement('LI');
         element.classList.add('comment__card');
 
@@ -635,7 +635,7 @@ document.addEventListener('DOMContentLoaded', () => {
     async function requestComments(post_id) {
         try {
 
-            url = `/api/show_comments/${post_id}`;
+            const url = `/api/show_comments/${post_id}`;
             const response = await fetch(url);
             const result = await response.json();
 
@@ -647,7 +647,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Change Follow or Like
-    async function handleChanges(data, url){
+    async function handleChanges(data, url) {
         try {
 
             const opts = {
@@ -666,7 +666,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Send Text
     async function sendText(url, data) {
         try {
-            
+
             const opts = {
                 method: "POST",
                 body: JSON.stringify(data)
@@ -680,5 +680,4 @@ document.addEventListener('DOMContentLoaded', () => {
             throw new Error(error);
         }
     }
-
-})
+}

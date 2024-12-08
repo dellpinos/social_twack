@@ -3,10 +3,11 @@ from django.db import models
 
 # Helpers
 from .utils import custom_timesince
+from users.models import User
 
-class User(AbstractUser):
-    def __str__(self):
-        return f"Username: {self.username}, Email: {self.email}"
+# class User(AbstractUser):
+#     def __str__(self):
+#         return f"Username: {self.username}, Email: {self.email}"
 
 class Follower(models.Model):
     user_follower = models.ForeignKey(User, on_delete = models.CASCADE, related_name = "followers")
