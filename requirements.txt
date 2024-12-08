@@ -1,4 +1,7 @@
 asgiref==3.8.1
+certifi==2024.8.30
 Django==5.1
+psycopg2-binary==2.9.10
+python-decouple==3.8
 sqlparse==0.5.1
-wheel @ file:///usr/local/Cellar/python%403.12/3.12.4/libexec/wheel-0.43.0-py3-none-any.whl#sha256=ff23205a590f2b902a2a21151019e96b93ab4a1409d7c9748b6bd210f4c0f44d
+wheel

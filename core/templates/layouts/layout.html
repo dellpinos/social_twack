@@ -7,15 +7,15 @@
       Twibble -{% block title %}
       {% endblock %}
     </title>
-    <link rel="icon" href="{% static 'network/img/duck-color.svg' %}" type="image/x-icon">
+    <link rel="icon" href="{% static '/img/duck-color.svg' %}" type="image/x-icon">
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@400;700&display=swap" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Matemasie&display=swap" rel="stylesheet" />
-    <link href="{% static 'network/styles.css' %}" rel="stylesheet" />
-    {% block script %}
 
-    {% endblock %}
+    <link href="{% static '/styles.css' %}" rel="stylesheet" />
+    <script src="{% static 'js/main.js' %}" type="module"></script>
+
   </head>
   <body>
     <header class="header">
@@ -41,7 +41,7 @@
       <div class="header__icon-container">
         <a class="header__icon" href="/">
           <p>Twack</p>
-          <img src="{% static 'network/img/duck-color.svg' %}" alt="Twibble Logo" width="200" />
+          <img src="{% static '/img/duck-color.svg' %}" alt="Twibble Logo" width="200" />
         </a>
       </div>
     </header>
